@@ -1,5 +1,7 @@
 package com.mazurak.cinema.dao;
 
+import java.util.List;
+import com.mazurak.cinema.entity.Movie;
 import com.mazurak.cinema.entity.User;
 import com.mazurak.cinema.entity.User.UserEntityQueries;
 
@@ -58,40 +60,4 @@ public final class UserDao extends DaoCRUDAbstract<User> {
 	}
 	
 	
-	// protected User createInstanceFIRST(List<String> lists) {
-		// lists.add(lists.get((int) Long.parseLong(lists.get(ID_USER_FIELD) == null ?
-		// "0" : lists.get(ID_USER_FIELD))));
-		// lists.add(lists.get(NAME_USER_FIELD) == null ? new String() :
-		// lists.get(NAME_USER_FIELD));
-		// lists.add(lists.get(LOGIN_USER_FIELD) == null ? new String() :
-		// lists.get(LOGIN_USER_FIELD));
-		// lists.add(lists.get(PASSWORD_USER_FIELD) == null ? new String() :
-		// lists.get(PASSWORD_USER_FIELD));
-		// lists.add(lists.get((int) Long.parseLong(lists.get(ID_ROLE_USER_FIELD) ==
-		// null ? "0" : lists.get(ID_ROLE_USER_FIELD))));
-		// return new User(
-		// Long.parseLong(lists.get(ID_USER_FIELD)),
-		// lists.get(NAME_USER_FIELD),
-		// lists.get(LOGIN_USER_FIELD),
-		// lists.get(PASSWORD_USER_FIELD),
-		// Long.parseLong(lists.get(ID_ROLE_USER_FIELD)));
-		// }
-	
-	// protected List<String> getFieldsFirst(User user) {
-		// List<String> userFields = new ArrayList<String>();
-		// userFields.add(ID_USER_FIELD, user.getId().toString());
-		// userFields.add(NAME_USER_FIELD, user.getName());
-		// userFields.add(LOGIN_USER_FIELD, user.getLogin());
-		// userFields.add(PASSWORD_USER_FIELD, user.getPassword());
-		// userFields.add(ID_ROLE_USER_FIELD, user.getRoleId().toString());
-		// return userFields;
-		// }
-	
-	// protected List<String> getUpdateFieldsFIRST(User user) {
-		// List<String> result = new ArrayList<String>(3);
-		// result.add(0,user.getName());
-		// result.add(1,user.getPassword());
-		// result.add(2,user.getId().toString());
-		// return result;
-		// }
 }

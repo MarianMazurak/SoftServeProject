@@ -1,10 +1,8 @@
 package com.mazurak.cinema.dao;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Arrays;
-
 import com.mazurak.cinema.db.ConnectionManager;
 import com.mazurak.cinema.entity.BaseEntity;
 import com.mazurak.cinema.entity.enums.SqlQueries;
@@ -15,28 +13,51 @@ protected final static String DATABASE_INPUT_ERROR = "Database Input Error";
 	
 	protected DaoCRUDAbstract() {
 	}
-	
-	// TODO Use Builder
-	// TODO Use List<String>
 		protected abstract String[] getFields(TEntity entity);
 
-		// TODO Use List<String>
 		protected abstract String[] getUpdateFields(TEntity entity);
+		
 		private boolean executeQuery(String query, SqlQueries sqlQueries) {
 			boolean result = false;
-			if(query == null) {
-				throw new RuntimeException(QUERY_NOT_FOUND);
-			} // change to try-with-resources DONE
-			Connection connection = ConnectionManager.getInstance().getConnection();
-			try(Statement statement = connection.createStatement();) {
-				System.out.println(connection.isClosed());
-				result = statement.execute(query);
+			Statement statement = null;
+			if (query == null) {
+				throw new RuntimeException(String.format(QUERY_NOT_FOUND, sqlQueries.name()));
 			}
-			 catch (SQLException e) {
-				throw new RuntimeException(DATABASE_INPUT_ERROR);
+			try {
+				statement = ConnectionManager.getInstance().getConnection().createStatement();
+				
+				result = statement.execute(query);
+			} catch (SQLException e) {
+					
+					throw new RuntimeException(DATABASE_INPUT_ERROR, e);
+			} finally {
+				if (statement != null) {
+					try {
+						statement.close();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
 			}
 			return result;
 		}
+		
+	
+		
+//		private boolean executeQuery(String query, SqlQueries sqlQueries) {
+//			boolean result = false;
+//			if(query == null) {
+//				throw new RuntimeException(QUERY_NOT_FOUND);
+//			} 
+//			Connection connection = ConnectionManager.getInstance().getConnection();
+//			try(Statement statement = connection.createStatement();) {
+//				result = statement.execute(query);
+//			}
+//			 catch (SQLException e) {
+//				throw new RuntimeException(DATABASE_INPUT_ERROR);
+//			}
+//			return result;
+//		}
 		
 		//Create
 		public boolean insert(TEntity entity) {
@@ -47,7 +68,6 @@ protected final static String DATABASE_INPUT_ERROR = "Database Input Error";
 		}
 		
 		//Update
-
 		public boolean updateByEntity(TEntity entity) {
 			String query = String.format(sqlQueries.get(SqlQueries.UPDATE_BY_ID).toString(),
 						(Object[]) getUpdateFields(entity));
@@ -59,7 +79,6 @@ protected final static String DATABASE_INPUT_ERROR = "Database Input Error";
 						fieldName, text, fieldCondition, textCondition);
 			return executeQuery(query, SqlQueries.UPDATE_BY_FIELD);
 		}
-
 		// Delete
 		public boolean deleteById(Long id) {
 			String query = String.format(sqlQueries.get(SqlQueries.DELETE_BY_ID).toString(),

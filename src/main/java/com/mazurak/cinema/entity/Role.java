@@ -1,7 +1,9 @@
 package com.mazurak.cinema.entity;
 
 import com.mazurak.cinema.entity.enums.SqlQueries;
-
+import lombok.Getter;
+import lombok.Setter;
+@Getter @Setter
 public class Role extends BaseEntityCommonFieldsAbstract {
 public static enum RoleEntityQueries {
 		
@@ -39,19 +41,4 @@ public static enum RoleEntityQueries {
 		super(id);
 		this.name = name;
 	}
-
-	//Getter
-	public String getName() {
-		return name;
-	}
-	//Setter
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	@Override
-	public String toString() {
-		return "Role [name=" + name + ", getId()=" + getId() + "]";
-	}
-	
 }

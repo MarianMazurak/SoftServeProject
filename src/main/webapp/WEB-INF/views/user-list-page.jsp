@@ -39,10 +39,11 @@
 							<td>${ user.role }</td>
 
 							<td class="text-center"><a class='btn btn-info btn-xs'
-								href=""><span
+								href="${ rootURL }/admin/update/${ user.id}"><span
 									class="glyphicon glyphicon-edit"></span> Edit</a> 
-							<a	href="${ rootURL }/admin/delete/${ user.id}"
-								class="btn btn-danger btn-xs"><span
+							
+							<a onclick="checkDeleteItem('${ rootURL }/admin/delete/${ user.id }')"
+								href="#" class="btn btn-danger btn-xs"><span
 									class="glyphicon glyphicon-remove"></span> Del</a></td>
 						</tr>
 					</c:forEach>
@@ -51,16 +52,12 @@
 		</div>
 	</div>
 
-
-
-
-
-
-
-
-
-
-
-
+	<script type="text/javascript">
+		function checkDeleteItem(url) {
+			if (confirm("Are you sure?")) {
+				window.location.href = url;
+			}
+		}
+	</script>
 </body>
 </html>

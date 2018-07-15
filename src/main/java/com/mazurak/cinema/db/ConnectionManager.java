@@ -40,7 +40,7 @@ public class ConnectionManager {
 		 */
 		if (dataSource == null) {
 			if (getDataSource() == null) {
-				setDataSource(DataSourceRepository.getDefault());
+				setDataSource(DataSourceRepository.getDataSource());
 			}
 		} else if ((getDataSource() == null) || (!getDataSource().equals(dataSource))) {
 			setDataSource(dataSource);
@@ -51,11 +51,8 @@ public class ConnectionManager {
 		return dataSource;
 	}
 
-	// Setter новий драйвир
-	private void setDataSource(DataSource dataSource) { // на випадок якщо ми захочимо змінити Driver до DB, відповідно
-														// при зміні Driver потрібно закрити всі старі connections а
-														// оскільки в нас можу бути зміна в багатопотоковості потрібно
-														// синхронізуватися
+	// Setter new Driver
+	private void setDataSource(DataSource dataSource) { // до DB, відповідно
 		synchronized (ConnectionManager.class) {
 			this.dataSource = dataSource;
 			registerDriver();
@@ -65,22 +62,12 @@ public class ConnectionManager {
 
 	}
 
-	/*-Класс DriverManager хранит список объектов типа Driver, 
-	 * которые зарегистрировались с помощью вызова DriverManager.registerDriver.
-	 *  Все классы драйверов Driver должны быть написаны со статической секцией инициализации, 
-	 *  в которой экземпляр данного класса создается и регистрируется в классе DriverManager при загрузке. 
-	 *  Таким образом, пользователь не должен вызывать DriverManager.registerDriver непосредственно;
-	 *   этот вызов автоматически делается самим драйвером при загрузке класса драйвера. 
-	 *   Класс же загружается двумя способами:
-	1. С помощью вызова Class.forName. Рекомендуется именно этот способ
-	2. Добавлением драйвера в свойство jdbc.drivers класса java.lang.System.*/
-
-	private void registerDriver() { // просто делегуємо метод DriverManager.registerDriver
+	private void registerDriver() {
 		try {
 			DriverManager.registerDriver(getDataSource().getDriver());
-		} // чого не викорисатти поле dataSource
-		catch (SQLException e) {
-			throw new RuntimeException(ConnectionValidatorException.FAILED_REGISTRATE_DRIVER);
+		} catch (SQLException e) {
+			System.out.println(ConnectionValidatorMessage.FAILED_REGISTRATE_DRIVER);
+			e.printStackTrace();
 		}
 	}
 
@@ -100,10 +87,9 @@ public class ConnectionManager {
 						getDataSource().getProtocol() + getDataSource().getProductName()
 								+ getDataSource().getConnectionDetails(),
 						getDataSource().getUserName(), getDataSource().getPassword());
-			} 
-			catch (SQLException e) {
-				// TODO Auto-generated catch block
-				throw new RuntimeException(ConnectionValidatorException.FAILED_CREATE_CONNECTION);
+			} catch (SQLException e) {
+				System.out.println(ConnectionValidatorMessage.FAILED_CREATE_CONNECTION);
+				e.printStackTrace();
 			}
 			addConnection(connection);
 		}
@@ -118,35 +104,12 @@ public class ConnectionManager {
 					try {
 						instance.getAllConnections().get(key).close();
 					} catch (SQLException e) {
-						throw new RuntimeException(ConnectionValidatorException.FAILED_CLOSE_CONNECTION);
+						System.out.println(ConnectionValidatorMessage.FAILED_CLOSE_CONNECTION);
+						e.printStackTrace();
 					}
 					instance.getAllConnections().put(key, null);
 				}
 			}
-		}
-	}
-
-	public void beginTransaction() {
-		try {
-			getConnection().setAutoCommit(false);
-		} catch (SQLException e) {
-			throw new RuntimeException(ConnectionValidatorException.FAILED_CONNECTION);
-		}
-	}
-
-	public void rollbackTransaction() {
-		try {
-			getConnection().rollback();
-		} catch (SQLException e) {
-			throw new RuntimeException(ConnectionValidatorException.FAILED_CONNECTION);
-		}
-	}
-
-	public void commitTransaction() {
-		try {
-			getConnection().commit();
-		} catch (SQLException e) {
-			throw new RuntimeException(ConnectionValidatorException.FAILED_CONNECTION);
 		}
 	}
 }

@@ -1,5 +1,8 @@
 package com.mazurak.cinema.entity.enums;
 
+import lombok.Getter;
+
+@Getter
 public enum AgeLimit {
 	
 	LIMIT_1("0+"),
@@ -12,9 +15,5 @@ public enum AgeLimit {
 	
 	private AgeLimit(String limit) {
 		this.limit = limit;
-	}
-
-	public String getLimit() {
-		return limit;
 	}
 }

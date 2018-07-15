@@ -9,8 +9,6 @@ public enum ViewUrls {
 	CREATE_MOVIES_PAGE_JSP("/WEB-INF/views/create-movie-page.jsp"),
 	UPDATE_MOVIES_PAGE_JSP("/WEB-INF/views/update-page.jsp"),
 	USER_LIST_PAGE_JSP("/WEB-INF/views/user-list-page.jsp");
-
-	
 	
 	private String url;
 

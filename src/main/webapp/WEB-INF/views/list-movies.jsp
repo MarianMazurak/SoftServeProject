@@ -11,7 +11,7 @@
 <link rel="stylesheet"
 	href="https://stackpath.bootstrapcdn.com/bootswatch/4.1.1/lumen/bootstrap.min.css">
 <link rel="stylesheet"
-	href="${ pageContext.request.contextPath }/resources/css/bootstrap.min.css">
+	href="${rootURL }/resources/css/bootstrap.min.css">
 <title>Insert title here</title>
 </head>
 <body>
@@ -21,6 +21,14 @@
 
 
 	<div class="container">
+
+		<form action="${ rootURL }/search" method="post" style="margin-left: 720px">
+			<div>
+				<input type="search"  name="searchParam">
+				<button>Search</button>
+			</div>
+		</form>
+
 
 		<div class="row col-md-6 col-md-offset-2 custyle">
 			<table class="table table-striped custab">
@@ -38,7 +46,7 @@
 					</tr>
 				</thead>
 				<tbody>
-					<c:forEach items="${ moviesAttr }" var="movie">
+					<c:forEach items="${ movieAttr }" var="movie">
 						<tr>
 							<td>${ movie.movieId }</td>
 							<td>${ movie.filmName }</td>
@@ -48,8 +56,9 @@
 
 							<td class="text-center"><a class='btn btn-info btn-xs'
 								href="${ rootURL }/updatemovie/${ movie.movieId }"><span
-									class="glyphicon glyphicon-edit"></span> Edit</a> <a
-								href="${ rootURL }/delete/${ movie.movieId }"
+									class="glyphicon glyphicon-edit"></span> Edit</a> 
+				<a onclick="checkDeleteItem('${ rootURL }/delete/${ movie.movieId }')"
+								href="#"
 								class="btn btn-danger btn-xs"><span
 									class="glyphicon glyphicon-remove"></span> Del</a></td>
 						</tr>
@@ -109,6 +118,15 @@
 		</div>
 
 	</div>
+	
+	<script type="text/javascript">
+		function checkDeleteItem(url) {
+			if (confirm("Are you sure?")) {
+				window.location.href = url;
+			}
+		}
+	</script>
+
 
 </body>
 </html>

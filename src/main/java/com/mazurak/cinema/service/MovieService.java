@@ -1,5 +1,6 @@
 package com.mazurak.cinema.service;
 
+import java.util.List;
 import com.mazurak.cinema.dao.MovieDao;
 import com.mazurak.cinema.dto.MovieDto;
 import com.mazurak.cinema.entity.Movie;
@@ -43,19 +44,19 @@ public class MovieService {
 		try {
 			movieDao.getById(id);
 		} catch (Exception e) {
-			System.out.println("RuntimeException" + e.getMessage());
 			result = false;
 		}
 		return result;
 	}
 	
 	public void saveMovieToDataBase(MovieDto movieDto) {
-		Movie movie = new Movie(1L, movieDto.getFilmName(),
-				movieDto.getDescription()
-				, movieDto.getAgeLimit()
-				, movieDto.getYear(),
+		Movie movie = new Movie(1L, 
+				movieDto.getFilmName(),
+				movieDto.getDescription(),
+				movieDto.getAgeLimit(),
+				movieDto.getYear(),
 				movieDto.getUserId());
 		movieDao.insert(movie);
 	}
-	
+
 }

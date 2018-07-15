@@ -5,7 +5,6 @@
 <html>
 <head>
 <!------ Include the above in your HEAD tag ---------->
-
 <link
 	href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css"
 	rel="stylesheet">
@@ -19,7 +18,7 @@
 
 
 	<c:choose>
-		<c:when test="${ userRoleId == 2 }">
+		<c:when test="${ userRoleId ==2 }">
 			<h2>Hello You Are Admin ${ nameAttr }</h2>
 			<ul class="list-group">
 				<li class="list-group-item"><a
@@ -55,13 +54,6 @@
 				</div>
 			</div>
 		</c:otherwise>
-
 	</c:choose>
-
-
-
-
-
-
 </body>
 </html>

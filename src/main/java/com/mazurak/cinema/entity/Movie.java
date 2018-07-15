@@ -1,7 +1,9 @@
 package com.mazurak.cinema.entity;
 
 import com.mazurak.cinema.entity.enums.SqlQueries;
-
+import lombok.Getter;
+import lombok.Setter;
+@Getter @Setter
 public class Movie extends BaseEntityCommonFieldsAbstract {
 	
 	public static enum MovieEntityQueries {
@@ -32,7 +34,6 @@ public class Movie extends BaseEntityCommonFieldsAbstract {
 			return query;
 		}
 	}
-
 	// id
 	private String filmName;
 	private String description;
@@ -48,53 +49,4 @@ public class Movie extends BaseEntityCommonFieldsAbstract {
 		this.year = year;
 		this.userId = userId;
 	}
-
-	//Getter
-	public String getFilmName() {
-		return filmName;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public String getAgeLimit() {
-		return ageLimit;
-	}
-
-	public Integer getYear() {
-		return year;
-	}
-
-	public Long getUserId() {
-		return userId;
-	}
-	
-	//Setter
-	public void setFilmName(String filmName) {
-		this.filmName = filmName;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public void setAgeLimit(String ageLimit) {
-		this.ageLimit = ageLimit;
-	}
-
-	public void setYear(Integer year) {
-		this.year = year;
-	}
-
-	public void setUserId(Long userId) {
-		this.userId = userId;
-	}
-
-	@Override
-	public String toString() {
-		return "Movie [filmName=" + filmName + ", description=" + description + ", ageLimit=" + ageLimit + ", year="
-				+ year + ", userId=" + userId + ", getId()=" + getId() + "]";
-	}
-
 }

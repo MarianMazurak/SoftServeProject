@@ -1,6 +1,5 @@
 package com.mazurak.cinema.dao;
 
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -8,7 +7,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import com.mazurak.cinema.db.ConnectionManager;
 import com.mazurak.cinema.entity.enums.SqlQueries;
 
@@ -22,59 +20,151 @@ public abstract class DaoReadAbstract<TEntity> implements DaoReadInterface<TEnti
 
 	public DaoReadAbstract() {
 		this.sqlQueries = new HashMap<Enum<?>, Enum<?>>();
-		// TODO Call init();
 	}
 
-	// TODO Use Builder
-	// TODO Use List<String>
 	protected abstract TEntity createInstance(String[] args);
 
-	// TODO Create abstract method init();
 	protected abstract void init();
 	// READ
-	private List<TEntity> getQueryResult(String query, SqlQueries sqlQueries) {
-		List<TEntity> all = new ArrayList<TEntity>();
-		String[] queryResult;
-//		List<String> queryResult;
-		if (query == null) {
-			throw new RuntimeException(QUERY_NOT_FOUND);
-		}
-		// change to try-with-resources DONE
-		Connection connection = ConnectionManager.getInstance().getConnection();
-		try (Statement statement = connection.createStatement(); ResultSet resultSet = statement.executeQuery(query);) {
-//			queryResult = new ArrayList<>();
-//			queryResult.add(resultSet.getMetaData().getColumnCount());
-			queryResult = new String[resultSet.getMetaData().getColumnCount()];
 
+
+
+	private List<TEntity> getQueryResult(String query, SqlQueries sqlQueries) {
+		List<TEntity> allEntities = new ArrayList<TEntity>();
+		Statement statement = null;
+		ResultSet resultSet = null;
+		String[] queryResult;
+		if (query == null) {
+			throw new RuntimeException(String.format(QUERY_NOT_FOUND, sqlQueries.name()));
+		}
+		try {
+			statement = ConnectionManager.getInstance().getConnection().createStatement();
+			resultSet = statement.executeQuery(query);
+			queryResult = new String[resultSet.getMetaData().getColumnCount()];
 			while (resultSet.next()) {
 				for (int i = 0; i < queryResult.length; i++) {
-//					queryResult.add(i,resultSet.getString(i + 1));
 					queryResult[i] = resultSet.getString(i + 1);
 				}
-				all.add(createInstance(queryResult));
+				allEntities.add(createInstance(queryResult));
 			}
 		} catch (SQLException e) {
+			checkDataBaseExisting(statement);
 			throw new RuntimeException(DATABASE_READING_ERROR, e);
+		} finally {
+			if (resultSet != null) {
+				try {
+					resultSet.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
 		}
-		if (all.isEmpty()) {
+		if (allEntities.isEmpty()) {
 			throw new RuntimeException(String.format(EMPTY_RESULTSET, query));
 		}
-		return all;
+		return allEntities;
 	}
 
+
+
+	private void checkDataBaseExisting(Statement statement) {
+		String query = "Select * from user";
+		try {
+			statement.execute(query);
+
+		} catch (SQLException e) {
+			try {
+				createTables(statement);
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
+		}
+	}
+
+	private void createTables(Statement statement) throws SQLException {
+
+		String createDB = "CREATE DATABASE test";
+		String queruCreateUser = "Create table users(" + "id int primary key auto_increment,"
+				+ "name varchar(50)," + "login varchar(30)," + "password varchar(45)," + "roleId int";
+		String queruCreateMovie = "Create table movies(" + "id int primary key auto_increment,"
+				+ "filmName varchar(50)," + "description varchar(30),"
+				+ "ageLimit ENUM('0+', '9+', '12+','16+','18+')," + "year int," + "userId int";
+		String queruCreateRoles =
+				"Create table movies(" + "id int primary key auto_increment," + "name varchar(45)";
+		String queruCreateReferencesUserRole =
+				"ALTER TABLE users ADD " + "FOREIGN KEY (roleId) REFERENCES roles(id);";
+		String queruCreateReferencesMovieUser =
+				"ALTER TABLE movies ADD " + "FOREIGN KEY (userId) REFERENCES users(id) on delete cascade;";
+
+		String queryCreateRolesUser = "INSERT INTO roles (name) VALUES ('User');";
+		String queryCreateRolesAdmin = "INSERT INTO roles (name) VALUES ('Admin');";
+		String queryCreateAdmin = "INSERT INTO users (login, password, name, id_role) "
+				+ "VALUES ('admin', 'admin', 'Taras', 2);";
+
+		statement.execute(createDB);
+		statement.execute(queruCreateUser);
+		statement.execute(queruCreateMovie);
+		statement.execute(queruCreateRoles);
+		statement.execute(queruCreateReferencesUserRole);
+		statement.execute(queruCreateReferencesMovieUser);
+		statement.execute(queryCreateRolesUser);
+		statement.execute(queryCreateRolesAdmin);
+		statement.execute(queryCreateAdmin);
+	}
+
+	// private List<TEntity> getQueryResult(String query, SqlQueries sqlQueries) {
+	// List<TEntity> all = new ArrayList<TEntity>();
+	// String[] queryResult;
+	// if (query == null) {
+	// throw new RuntimeException(QUERY_NOT_FOUND);
+	// }
+	// Connection connection = ConnectionManager.getInstance().getConnection();
+	// try (Statement statement = connection.createStatement(); ResultSet resultSet =
+	// statement.executeQuery(query);) {
+	// queryResult = new String[resultSet.getMetaData().getColumnCount()];
+	//
+	// while (resultSet.next()) {
+	// for (int i = 0; i < queryResult.length; i++) {
+	// queryResult[i] = resultSet.getString(i + 1);
+	// }
+	// all.add(createInstance(queryResult));
+	// }
+	// } catch (SQLException e) {
+	// throw new RuntimeException(DATABASE_READING_ERROR, e);
+	// }
+	// if (all.isEmpty()) {
+	// throw new RuntimeException(String.format(EMPTY_RESULTSET, query));
+	// }
+	// return all;
+	// }
+
 	public TEntity getById(Long id) {
-		return getQueryResult(String.format(sqlQueries.get(SqlQueries.GET_BY_ID).toString(), id), SqlQueries.GET_BY_ID)
-				.get(0);
+		return getQueryResult(String.format(sqlQueries.get(SqlQueries.GET_BY_ID).toString(), id),
+				SqlQueries.GET_BY_ID).get(0);
 	}
 
 	public List<TEntity> getByFieldName(String fieldName, String text) {
-		return getQueryResult(String.format(sqlQueries.get(SqlQueries.GET_BY_FIELD).toString(), fieldName, text),
+		return getQueryResult(
+				String.format(sqlQueries.get(SqlQueries.GET_BY_FIELD).toString(), fieldName, text),
 				SqlQueries.GET_BY_FIELD);
 	}
 
 	public List<TEntity> getAll() {
-		return getQueryResult(
-				sqlQueries.get(SqlQueries.GET_ALL).toString(), SqlQueries.GET_ALL);
+		return getQueryResult(sqlQueries.get(SqlQueries.GET_ALL).toString(), SqlQueries.GET_ALL);
 	}
-	
+
+	public List<TEntity> getByOpertorLike(String name) {
+		String query = "Select id,filmName,description,ageLimit,year,"
+				+ "idUser from movies where filmName like '%" + name + "%'";
+		return getQueryResult(query,SqlQueries.GET_BY_LIKE_OPERATOP);
+	}
 }
+

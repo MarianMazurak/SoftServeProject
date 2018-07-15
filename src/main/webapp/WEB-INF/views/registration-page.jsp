@@ -29,19 +29,19 @@
     
      <div class="form-group">
       <label>Name</label>
-      <input type="text" class="form-control" name="nameParam" placeholder="Enter Name" >
+      <input type="text" class="form-control" name="name" placeholder="Enter Name" >
       <small class="form-text text-muted">Please enter your real name.</small>
     </div>
     
     <div class="form-group">
       <label>Login</label> 	<p><font color="red">${error}</font>	</p>
-      <input type="text" class="form-control"  aria-describedby="emailHelp"name="loginParam" placeholder="Enter Login">
+      <input type="text" class="form-control"  aria-describedby="emailHelp"name="login" placeholder="Enter Login">
        <small  class="form-text text-muted">login must contain 6 characters.</small>
     </div>
     
     <div class="form-group">
       <label>Password</label>
-      <input type="password" class="form-control" name="passwordParam"  placeholder="Password">
+      <input type="password" class="form-control" name="password"  placeholder="Password">
       <small id="emailHelp" class="form-text text-muted">Password must contain 8 characters.</small>
     </div>
     

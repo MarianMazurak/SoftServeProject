@@ -47,25 +47,4 @@ public final class RoleDao extends DaoCRUDAbstract<Role> {
 	public Role getRoleEntityByName(String name) {
 		return getByFieldName(ROLE_FIELDNAME, name).get(0);
 	}
-	
-	
-	
-//	protected List<String> getFieldsFirST(Role role) {
-//	List<String> roleFields = new ArrayList<>(2);
-//	roleFields.add(ID_ROLE_FIELD, role.getId().toString());
-//	roleFields.add(NAME_ROLE_FIELD, role.getName());
-//	return roleFields;
-//}
-	
-//	protected List<String> getUpdateFieldsFIRST(Role role) {
-//	List<String> result = new ArrayList<>(2);
-//	result.add(0, role.getName());
-//	result.add(1,role.getId().toString());
-//	return result;
-//}
-	
-//	protected Role createInstance(List<String> args) {
-//		return new Role(Long.parseLong(args.get(ID_ROLE_FIELD) == null ? "0" : args.get(ID_ROLE_FIELD)),
-//				args.get(NAME_ROLE_FIELD) == null ? new String() : args.get(NAME_ROLE_FIELD));
-//	}
 }

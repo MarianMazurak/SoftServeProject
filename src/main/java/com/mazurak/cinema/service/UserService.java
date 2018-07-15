@@ -26,7 +26,11 @@ public class UserService {
 	}
 
 	public void saveUserToDataBase(UserDto userDto) {
-		User user = new User(0L, userDto.getName(), userDto.getLogin(), userDto.getPassword(), 1L);
+		User user = new User(0L, 
+				userDto.getName(),
+				userDto.getLogin(),
+				userDto.getPassword(),
+				1L);
 		userDao.insert(user);
 	}
 
@@ -50,17 +54,30 @@ public class UserService {
 		try {
 			user.setRoleId(roleDao.getRoleEntityByName(userDto.getRole()).getId());
 		} catch (Exception e) {
-			System.out.println("EuntimeException, message:" + e.getMessage());
+			System.out.println("RuntimeException, message:" + e.getMessage());
 			result = false;
 		}
 		return result;
 	}
-
+	
+	public UserDto getUserDto(Long idUser) {
+		User user = userDao.getById(idUser);
+		return  new UserDto(
+				user.getId(),
+				user.getName(),
+				user.getLogin(),
+				user.getPassword(),
+				roleDao.getById(user.getRoleId()).getName());
+	} 
+	
 	public UserDto getUserDto(LoginDto loginDto) {
 		User user = userDao.getUserEntityByLogin(loginDto.getLogin());
-		return new UserDto(user.getId(), user.getName(), user.getLogin(), user.getPassword(),
+		return new UserDto(
+				user.getId(),
+				user.getName(),
+				user.getLogin(),
+				user.getPassword(),
 				roleDao.getById(user.getRoleId()).getName());
-
 	}
 
 	public boolean isValid(LoginDto loginDto) {
@@ -93,13 +110,14 @@ public class UserService {
 	public List<UserDto> getAllUsers() {
 		List<UserDto> listUsersDto = new ArrayList<>();
 		for (User user : userDao.getAll()) {
-//			Role userRole = roleDao.getById(user.getRoleId());
-//			userRole.getName();
-			UserDto userDto = new UserDto(user.getId(), user.getName(), user.getLogin(), user.getPassword(),
+			UserDto userDto = new UserDto(
+					user.getId(),
+					user.getName(),
+					user.getLogin(),
+					user.getPassword(),
 					user.getRoleId().toString());
-					
+
 			listUsersDto.add(userDto);
-			
 		}
 		return listUsersDto;
 	}
@@ -113,5 +131,18 @@ public class UserService {
 		Long roleId = user.getRoleId();
 		return roleId;
 	}
-
+	
+	public String getUserRole(Long idUser) {
+		User user = userDao.getById(idUser);
+		Role role = roleDao.getById(user.getRoleId());
+		return role.getName();
+	}
+	
+	//TODO change this method
+	public boolean updateUserRoleByAdmin(String newRole, Long idUser) {
+		System.out.println(roleDao.updateByFieldName("name", newRole, "name", 
+				getUserRole(idUser)));
+		return roleDao.updateByFieldName("name", newRole, "name", 
+				getUserRole(idUser));
+	}
 }
