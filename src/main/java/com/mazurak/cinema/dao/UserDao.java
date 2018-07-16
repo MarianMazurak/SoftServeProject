@@ -1,7 +1,5 @@
 package com.mazurak.cinema.dao;
 
-import java.util.List;
-import com.mazurak.cinema.entity.Movie;
 import com.mazurak.cinema.entity.User;
 import com.mazurak.cinema.entity.User.UserEntityQueries;
 
@@ -56,8 +54,10 @@ public final class UserDao extends DaoCRUDAbstract<User> {
 	}
 
 	public User getUserEntityByLogin(String login) {
-		return getByFieldName(LOGIN_FIELDNAME, login).get(0); 
+		try {
+			return getByFieldName(LOGIN_FIELDNAME, login).get(0);
+		} catch (IndexOutOfBoundsException e) {
+			return null;
+		}
 	}
-	
-	
 }

@@ -9,7 +9,8 @@ import com.mazurak.cinema.dto.LoginDto;
 import com.mazurak.cinema.dto.UserDto;
 import com.mazurak.cinema.entity.Role;
 import com.mazurak.cinema.entity.User;
-
+import lombok.AllArgsConstructor;
+@AllArgsConstructor
 public class UserService {
 
 	private UserDao userDao;
@@ -18,11 +19,6 @@ public class UserService {
 	public UserService() {
 		userDao = new UserDao();
 		roleDao = new RoleDao();
-	}
-
-	public UserService(UserDao userDao, RoleDao roleDao) {
-		this.userDao = userDao;
-		this.roleDao = roleDao;
 	}
 
 	public void saveUserToDataBase(UserDto userDto) {
@@ -70,16 +66,6 @@ public class UserService {
 				roleDao.getById(user.getRoleId()).getName());
 	} 
 	
-	public UserDto getUserDto(LoginDto loginDto) {
-		User user = userDao.getUserEntityByLogin(loginDto.getLogin());
-		return new UserDto(
-				user.getId(),
-				user.getName(),
-				user.getLogin(),
-				user.getPassword(),
-				roleDao.getById(user.getRoleId()).getName());
-	}
-
 	public boolean isValid(LoginDto loginDto) {
 		boolean result = true;
 		User users = null;
@@ -101,11 +87,6 @@ public class UserService {
 	public Long getIdUserByLogin(LoginDto loginDto) {
 		return userDao.getUserEntityByLogin(loginDto.getLogin()).getId();
 	}
-
-	public Long getIdUserByLogin(UserDto userDto) {
-		return userDao.getUserEntityByLogin(userDto.getLogin()).getId();
-	}
-
 	// Get All Users for Admin page
 	public List<UserDto> getAllUsers() {
 		List<UserDto> listUsersDto = new ArrayList<>();
@@ -138,7 +119,6 @@ public class UserService {
 		return role.getName();
 	}
 	
-	//TODO change this method
 	public boolean updateUserRoleByAdmin(String newRole, Long idUser) {
 		System.out.println(roleDao.updateByFieldName("name", newRole, "name", 
 				getUserRole(idUser)));

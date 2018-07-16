@@ -1,5 +1,8 @@
 package com.mazurak.cinema.controllers.enums;
 
+import lombok.AllArgsConstructor;
+
+@AllArgsConstructor
 public enum ViewUrls {
 
 	LOGIN_PAGE_JSP("/WEB-INF/views/login-page.jsp"),
@@ -8,13 +11,10 @@ public enum ViewUrls {
 	USER_LIST_MOVIES_JSP("/WEB-INF/views/list-movies.jsp"),
 	CREATE_MOVIES_PAGE_JSP("/WEB-INF/views/create-movie-page.jsp"),
 	UPDATE_MOVIES_PAGE_JSP("/WEB-INF/views/update-page.jsp"),
-	USER_LIST_PAGE_JSP("/WEB-INF/views/user-list-page.jsp");
+	USER_LIST_PAGE_JSP("/WEB-INF/views/user-list-page.jsp"),
+	USER_SEARCH_PAGE_JSP("/WEB-INF/views/search-page.jsp");
 	
 	private String url;
-
-	private ViewUrls(String url) {
-		this.url = url;
-	}
 
 	@Override
 	public String toString() {

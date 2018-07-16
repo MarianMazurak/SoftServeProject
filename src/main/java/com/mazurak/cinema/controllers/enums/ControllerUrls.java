@@ -1,5 +1,8 @@
 package com.mazurak.cinema.controllers.enums;
 
+import lombok.AllArgsConstructor;
+
+@AllArgsConstructor
 public enum ControllerUrls {
 
 	LOGIN_SERVLET("/login"),
@@ -10,15 +13,12 @@ public enum ControllerUrls {
 	DELETE_MOVIE_SERVLET("/deletemovie"),
 	USER_MOVIE_LIST_SERVLET("/listusersmovies"),
 	ADMIN_USER_LIST_SERVLET("/userslist"),
-	LIST_USER_MOVIES_PAGINATION("http://localhost:8080/SoftServeProject/listusersmovies?page=0");
-	
-	
+	LIST_USER_MOVIES_PAGINATION("http://localhost:8080/SoftServeProject/listusersmovies?page=0"),
+	USER_SEARCH_SERVLET("/search"),
+	LIST_MOVIES_PAGE("/listusersmovies?page=");
 	
 	private String url;
 
-	private ControllerUrls(String url) {
-		this.url = url;
-	}
 	@Override
 	public String toString() {
 		return url;

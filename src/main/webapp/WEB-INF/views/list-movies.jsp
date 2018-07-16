@@ -118,7 +118,20 @@
 		</div>
 
 	</div>
-	
+
+	<div class="col-4 d-flex justify-content-end">
+            <form method="post" action="/listusersmovies">
+                <label>Items on Page </label>
+                <select class="form-control my-form-controll"  name="itemsonpage">
+                    <option <c:if test="${userStockItemsDto.pageOffset == 5}">selected</c:if>>5</option>
+                    <option <c:if test="${userStockItemsDto.pageOffset == 10}">selected</c:if>>10</option>
+                    <option <c:if test="${userStockItemsDto.pageOffset == 20}">selected</c:if>>20</option>
+                </select>
+                <button type="submit" class="btn btn-primary">Apply</button>
+            </form>
+        </div>
+
+
 	<script type="text/javascript">
 		function checkDeleteItem(url) {
 			if (confirm("Are you sure?")) {

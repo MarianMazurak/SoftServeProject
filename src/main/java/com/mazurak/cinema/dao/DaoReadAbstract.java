@@ -1,5 +1,6 @@
 package com.mazurak.cinema.dao;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -25,21 +26,19 @@ public abstract class DaoReadAbstract<TEntity> implements DaoReadInterface<TEnti
 	protected abstract TEntity createInstance(String[] args);
 
 	protected abstract void init();
+
 	// READ
-
-
-
 	private List<TEntity> getQueryResult(String query, SqlQueries sqlQueries) {
 		List<TEntity> allEntities = new ArrayList<TEntity>();
-		Statement statement = null;
+		PreparedStatement statement = null;
 		ResultSet resultSet = null;
 		String[] queryResult;
 		if (query == null) {
-			throw new RuntimeException(String.format(QUERY_NOT_FOUND, sqlQueries.name()));
+			System.out.println((String.format(QUERY_NOT_FOUND, sqlQueries.name())));
 		}
 		try {
-			statement = ConnectionManager.getInstance().getConnection().createStatement();
-			resultSet = statement.executeQuery(query);
+			statement = ConnectionManager.getInstance().getConnection().prepareStatement(query);
+			resultSet = statement.executeQuery();
 			queryResult = new String[resultSet.getMetaData().getColumnCount()];
 			while (resultSet.next()) {
 				for (int i = 0; i < queryResult.length; i++) {
@@ -49,19 +48,20 @@ public abstract class DaoReadAbstract<TEntity> implements DaoReadInterface<TEnti
 			}
 		} catch (SQLException e) {
 			checkDataBaseExisting(statement);
-			throw new RuntimeException(DATABASE_READING_ERROR, e);
+			System.out.println(DATABASE_READING_ERROR);
+			e.printStackTrace();
 		} finally {
 			if (resultSet != null) {
 				try {
 					resultSet.close();
-				} catch (Exception e) {
+				} catch (SQLException e) {
 					e.printStackTrace();
 				}
 			}
 			if (statement != null) {
 				try {
 					statement.close();
-				} catch (Exception e) {
+				} catch (SQLException e) {
 					e.printStackTrace();
 				}
 			}
@@ -71,8 +71,6 @@ public abstract class DaoReadAbstract<TEntity> implements DaoReadInterface<TEnti
 		}
 		return allEntities;
 	}
-
-
 
 	private void checkDataBaseExisting(Statement statement) {
 		String query = "Select * from user";
@@ -98,7 +96,7 @@ public abstract class DaoReadAbstract<TEntity> implements DaoReadInterface<TEnti
 				+ "filmName varchar(50)," + "description varchar(30),"
 				+ "ageLimit ENUM('0+', '9+', '12+','16+','18+')," + "year int," + "userId int";
 		String queruCreateRoles =
-				"Create table movies(" + "id int primary key auto_increment," + "name varchar(45)";
+				"Create table roles(" + "id int primary key auto_increment," + "name varchar(45)";
 		String queruCreateReferencesUserRole =
 				"ALTER TABLE users ADD " + "FOREIGN KEY (roleId) REFERENCES roles(id);";
 		String queruCreateReferencesMovieUser =
@@ -120,35 +118,13 @@ public abstract class DaoReadAbstract<TEntity> implements DaoReadInterface<TEnti
 		statement.execute(queryCreateAdmin);
 	}
 
-	// private List<TEntity> getQueryResult(String query, SqlQueries sqlQueries) {
-	// List<TEntity> all = new ArrayList<TEntity>();
-	// String[] queryResult;
-	// if (query == null) {
-	// throw new RuntimeException(QUERY_NOT_FOUND);
-	// }
-	// Connection connection = ConnectionManager.getInstance().getConnection();
-	// try (Statement statement = connection.createStatement(); ResultSet resultSet =
-	// statement.executeQuery(query);) {
-	// queryResult = new String[resultSet.getMetaData().getColumnCount()];
-	//
-	// while (resultSet.next()) {
-	// for (int i = 0; i < queryResult.length; i++) {
-	// queryResult[i] = resultSet.getString(i + 1);
-	// }
-	// all.add(createInstance(queryResult));
-	// }
-	// } catch (SQLException e) {
-	// throw new RuntimeException(DATABASE_READING_ERROR, e);
-	// }
-	// if (all.isEmpty()) {
-	// throw new RuntimeException(String.format(EMPTY_RESULTSET, query));
-	// }
-	// return all;
-	// }
-
 	public TEntity getById(Long id) {
-		return getQueryResult(String.format(sqlQueries.get(SqlQueries.GET_BY_ID).toString(), id),
-				SqlQueries.GET_BY_ID).get(0);
+		try {
+			return getQueryResult(String.format(sqlQueries.get(SqlQueries.GET_BY_ID).toString(), id),
+					SqlQueries.GET_BY_ID).get(0);
+		} catch (IndexOutOfBoundsException e) {
+			return null;
+		}
 	}
 
 	public List<TEntity> getByFieldName(String fieldName, String text) {
@@ -164,7 +140,7 @@ public abstract class DaoReadAbstract<TEntity> implements DaoReadInterface<TEnti
 	public List<TEntity> getByOpertorLike(String name) {
 		String query = "Select id,filmName,description,ageLimit,year,"
 				+ "idUser from movies where filmName like '%" + name + "%'";
-		return getQueryResult(query,SqlQueries.GET_BY_LIKE_OPERATOP);
+		return getQueryResult(query, SqlQueries.GET_BY_LIKE_OPERATOP);
 	}
 }
 

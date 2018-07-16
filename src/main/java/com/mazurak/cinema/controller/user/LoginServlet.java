@@ -21,7 +21,8 @@ import com.mazurak.cinema.service.UserService;
 @WebServlet({"","/login"})
 public class LoginServlet extends HttpServlet {
 
-	private static final long serialVersionUID = 1336547045057016875L;
+	private static final long serialVersionUID = 1L;
+
 	private UserService userService;
 
 	public LoginServlet() {

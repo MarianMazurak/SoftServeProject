@@ -52,14 +52,13 @@ public class ConnectionManager {
 	}
 
 	// Setter new Driver
-	private void setDataSource(DataSource dataSource) { // до DB, відповідно
+	private void setDataSource(DataSource dataSource) {
 		synchronized (ConnectionManager.class) {
 			this.dataSource = dataSource;
 			registerDriver();
 			closeAllConnection();
 
 		}
-
 	}
 
 	private void registerDriver() {

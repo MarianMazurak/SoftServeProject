@@ -23,5 +23,8 @@ public class ParameterName {
 	//UserMovieServlet
 	public static final String PAGE = "page";
 	
+	//UserMoviesSearchServlet
+	public static final String SEARCH = "searchParam";
+	
 }
 

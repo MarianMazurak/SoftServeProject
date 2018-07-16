@@ -41,7 +41,8 @@ public class Movie extends BaseEntityCommonFieldsAbstract {
 	private Integer year;
 	private Long userId;
 	
-	public Movie(Long id, String filmName, String description, String ageLimit, Integer year, Long userId) {
+	public Movie(Long id, String filmName, String description,
+							 String ageLimit, Integer year, Long userId) {
 		super(id);
 		this.filmName = filmName;
 		this.description = description;

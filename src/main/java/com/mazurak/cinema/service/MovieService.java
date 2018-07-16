@@ -1,20 +1,16 @@
 package com.mazurak.cinema.service;
 
-import java.util.List;
 import com.mazurak.cinema.dao.MovieDao;
 import com.mazurak.cinema.dto.MovieDto;
 import com.mazurak.cinema.entity.Movie;
-
+import lombok.AllArgsConstructor;
+@AllArgsConstructor
 public class MovieService {
 	
 	private MovieDao movieDao;
 
 	public MovieService() {
 		movieDao = new MovieDao();
-	}
-
-	public MovieService(MovieDao movieDao) {
-		this.movieDao = movieDao;
 	}
 
 	public MovieDto getMovieDto(Long id) {

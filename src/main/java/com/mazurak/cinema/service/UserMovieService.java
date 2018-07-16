@@ -9,7 +9,8 @@ import com.mazurak.cinema.dto.MovieDto;
 import com.mazurak.cinema.dto.UserMovieDto;
 import com.mazurak.cinema.entity.Movie;
 import com.mazurak.cinema.entity.User;
-
+import lombok.AllArgsConstructor;
+@AllArgsConstructor
 public class UserMovieService {
 
 	private UserDao userDao;
@@ -20,25 +21,22 @@ public class UserMovieService {
 		movieDao = new MovieDao();
 	}
 
-	public UserMovieService(UserDao userDao, MovieDao movieDao) {
-		this.userDao = userDao;
-		this.movieDao = movieDao;
-	}
-
-
 	public UserMovieDto getUserMovies(Long idUser) {
 		User user = userDao.getById(idUser);
 		UserMovieDto userMovieDto = new UserMovieDto(user.getLogin());
 		for (Movie movie : movieDao.getMovieEntityByIdUser(idUser)) {
-			MovieDto movieDto = new MovieDto(movie.getId(), movie.getFilmName(), movie.getDescription(),
-					movie.getAgeLimit(), movie.getYear(), movie.getUserId());
+			MovieDto movieDto = new MovieDto(
+					movie.getId(),
+					movie.getFilmName(),
+					movie.getDescription(),
+					movie.getAgeLimit(),
+					movie.getYear(),
+					movie.getUserId());
 			userMovieDto.addMovieDto(movieDto);
 
 		}
 		return userMovieDto;
 	}
-
-	// (MovieDTO) Done
 	public List<MovieDto> getUserMoviesById(Long idUser) {
 		return getUserMovies(idUser).getMovies();
 	}
@@ -47,7 +45,6 @@ public class UserMovieService {
 		return getUserMoviesById(idUser).size();
 	}
 
-	// (MovieDTO) Done
 	public List<MovieDto> getMoviePagination(List<MovieDto> sourceList, Integer pageNumer,
 			Integer pageSize) {
 		if (pageSize <= 0 || pageNumer <= 0) {

@@ -15,7 +15,7 @@ public class UserMovieDto {
 	private List<MovieDto> movies;
 
 	public UserMovieDto() {
-		this.userLogin = userLogin;
+//		this.userLogin = userLogin;
 		this.movies = new ArrayList<MovieDto>();
 	}
 
