@@ -16,20 +16,15 @@
 </head>
 <body>
 	<jsp:include page="_header.jsp"></jsp:include>
-
-
-
-
 	<div class="container">
 
-		<form action="${ rootURL }/search" method="post" style="margin-left: 720px">
+		<form action="${ rootURL }/search" method="post"
+			style="margin-left: 720px">
 			<div>
-				<input type="search"  name="searchParam">
+				<input type="search" name="searchParam">
 				<button>Search</button>
 			</div>
 		</form>
-
-
 		<div class="row col-md-6 col-md-offset-2 custyle">
 			<table class="table table-striped custab">
 				<thead>
@@ -56,16 +51,14 @@
 
 							<td class="text-center"><a class='btn btn-info btn-xs'
 								href="${ rootURL }/updatemovie/${ movie.movieId }"><span
-									class="glyphicon glyphicon-edit"></span> Edit</a> 
-				<a onclick="checkDeleteItem('${ rootURL }/delete/${ movie.movieId }')"
-								href="#"
-								class="btn btn-danger btn-xs"><span
+									class="glyphicon glyphicon-edit"></span> Edit</a> <a
+								onclick="checkDeleteItem('${ rootURL }/delete/${ movie.movieId }')"
+								href="#" class="btn btn-danger btn-xs"><span
 									class="glyphicon glyphicon-remove"></span> Del</a></td>
 						</tr>
 					</c:forEach>
 				</tbody>
 			</table>
-
 			<!-- перехід на 1 і ост сторінку -->
 			<c:url var="firstUrl" value="/listusersmovies?page=0" />
 			<c:url var="lastUrl"
@@ -79,6 +72,7 @@
 			<div class="row" style="margin: 0 auto;">
 				<ul class="pagination">
 					<!-- if else  -->
+					
 					<c:choose>
 						<c:when test="${ currentIndex == 0 }">
 							<li class="disabled"><a href="#">&lt;&lt;</a></li>
@@ -90,7 +84,7 @@
 							<li><a href="${ prevUrl }">&lt;</a></li>
 						</c:otherwise>
 					</c:choose>
-					<c:forEach var="i" begin="${ beginIndex }" end="${ endIndex }">
+					<c:forEach var="i" begin="${ beginIndex  }" end="${ endIndex  }">
 						<c:url var="pageUrl" value="/listusersmovies?page=${ i+1 }"></c:url>
 
 						<c:choose>
@@ -116,21 +110,7 @@
 				</ul>
 			</div>
 		</div>
-
 	</div>
-
-	<div class="col-4 d-flex justify-content-end">
-            <form method="post" action="/listusersmovies">
-                <label>Items on Page </label>
-                <select class="form-control my-form-controll"  name="itemsonpage">
-                    <option <c:if test="${userStockItemsDto.pageOffset == 5}">selected</c:if>>5</option>
-                    <option <c:if test="${userStockItemsDto.pageOffset == 10}">selected</c:if>>10</option>
-                    <option <c:if test="${userStockItemsDto.pageOffset == 20}">selected</c:if>>20</option>
-                </select>
-                <button type="submit" class="btn btn-primary">Apply</button>
-            </form>
-        </div>
-
 
 	<script type="text/javascript">
 		function checkDeleteItem(url) {
@@ -139,7 +119,5 @@
 			}
 		}
 	</script>
-
-
 </body>
 </html>

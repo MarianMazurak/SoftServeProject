@@ -8,7 +8,6 @@ import lombok.Setter;
 public abstract class BaseEntityCommonFieldsAbstract implements BaseEntity {
 
 	private Long id;
-
 	public BaseEntityCommonFieldsAbstract(Long id) {
 		this.id = id;
 	}

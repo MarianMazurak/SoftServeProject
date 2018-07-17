@@ -60,7 +60,6 @@ public class ConnectionManager {
 
 		}
 	}
-
 	private void registerDriver() {
 		try {
 			DriverManager.registerDriver(getDataSource().getDriver());

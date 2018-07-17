@@ -18,7 +18,7 @@
 
 
 	<c:choose>
-		<c:when test="${ userRoleId ==2 }">
+		<c:when test="${ userRoleId == 2 }">
 			<h2>Hello You Are Admin ${ nameAttr }</h2>
 			<ul class="list-group">
 				<li class="list-group-item"><a
@@ -33,11 +33,11 @@
 		<c:otherwise>
 			<div class="main-content">
 				<div class="container">
-					<h3 class="site-title">My Profile</h3>
+					<h3 class="site-title" style="color: red">My Profile Page</h3>
 					<div class="col-md-5">
 						<img class="img-responsive"
 							src="http://www.pvhc.net/img240/uyttxprhsqycyximpzjb.png"
-							style="width: 30%;"> <i class="fa fa-wrench"> Edit</i>
+							style="width: 30%;"> 
 						<div class=" clearfix">
 							<h3>Hello ${ nameAttr }</h3>
 							<h4>You are a Free Member</h4>

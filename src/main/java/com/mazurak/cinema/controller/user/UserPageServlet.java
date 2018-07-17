@@ -29,13 +29,14 @@ public class UserPageServlet extends HttpServlet {
 		// check active session 
 		Security.isActiveSession(req, resp);
 		//
-		Long id =
-				Long.parseLong(req.getSession().getAttribute(AttributeName.USER_ID_ATTRIBUTE).toString());
-
-		Long roleId =
-				Long.parseLong(req.getSession().getAttribute(AttributeName.USER_ROLE_ATTRIBUTE).toString());
-
+		
 		try {
+			Long id = Long.parseLong(req.getSession()
+					.getAttribute(AttributeName.USER_ID_ATTRIBUTE).toString());
+
+			Long roleId =	Long.parseLong(req
+					.getSession().getAttribute(AttributeName.USER_ROLE_ATTRIBUTE).toString());
+
 			req.setAttribute(AttributeName.USER_ROLE_ID, roleId);
 			req.setAttribute(AttributeName.USER_ID, id);
 			req.setAttribute(AttributeName.COUNT_ATTR, userMovieService.getCountMovieInUser(id));

@@ -14,18 +14,4 @@ public final class DataSource {
 		private String connectionDetails;
 		private String userName;
 		private String password;
-
-		@Override
-		public boolean equals(Object dataSource) {
-			boolean result = false;
-			if (dataSource instanceof DataSource) {
-				result = getDriver().getClass().getName().equals(((DataSource) dataSource).getDriver().getClass().getName())
-						&& getProtocol().equals(((DataSource) dataSource).getProtocol())
-						&& getProductName().equals(((DataSource) dataSource).getProductName())
-						&& getConnectionDetails().equals(((DataSource) dataSource).getConnectionDetails())
-						&& getUserName().equals(((DataSource) dataSource).getUserName())
-						&& getPassword().equals(((DataSource) dataSource).getPassword());
-			}
-			return result;
-		}
 }

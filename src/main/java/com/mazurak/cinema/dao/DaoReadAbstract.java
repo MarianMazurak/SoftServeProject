@@ -24,21 +24,20 @@ public abstract class DaoReadAbstract<TEntity> implements DaoReadInterface<TEnti
 	}
 
 	protected abstract TEntity createInstance(String[] args);
-
 	protected abstract void init();
 
 	// READ
 	private List<TEntity> getQueryResult(String query, SqlQueries sqlQueries) {
 		List<TEntity> allEntities = new ArrayList<TEntity>();
-		PreparedStatement statement = null;
+		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
 		String[] queryResult;
 		if (query == null) {
 			System.out.println((String.format(QUERY_NOT_FOUND, sqlQueries.name())));
 		}
 		try {
-			statement = ConnectionManager.getInstance().getConnection().prepareStatement(query);
-			resultSet = statement.executeQuery();
+			preparedStatement = ConnectionManager.getInstance().getConnection().prepareStatement(query);
+			resultSet = preparedStatement.executeQuery();
 			queryResult = new String[resultSet.getMetaData().getColumnCount()];
 			while (resultSet.next()) {
 				for (int i = 0; i < queryResult.length; i++) {
@@ -47,7 +46,7 @@ public abstract class DaoReadAbstract<TEntity> implements DaoReadInterface<TEnti
 				allEntities.add(createInstance(queryResult));
 			}
 		} catch (SQLException e) {
-			checkDataBaseExisting(statement);
+			checkDataBaseExisting(preparedStatement);
 			System.out.println(DATABASE_READING_ERROR);
 			e.printStackTrace();
 		} finally {
@@ -58,9 +57,9 @@ public abstract class DaoReadAbstract<TEntity> implements DaoReadInterface<TEnti
 					e.printStackTrace();
 				}
 			}
-			if (statement != null) {
+			if (preparedStatement != null) {
 				try {
-					statement.close();
+					preparedStatement.close();
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}

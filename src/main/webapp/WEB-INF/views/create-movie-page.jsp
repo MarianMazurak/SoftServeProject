@@ -51,6 +51,7 @@
 					name="yearParam" value="${ movie.year }"> 
 					<small class="form-text text-muted">Enter please year</small>
 			</div>
+			<p><font color="red">${error}</font></p>
 
 			<button type="submit" class="btn btn-primary">Add Film to ${ userNameAttr } collections</button>
 		</fieldset>

@@ -34,7 +34,7 @@
     </div>
     
     <div class="form-group">
-      <label>Login</label> 	<p><font color="red">${error}</font>	</p>
+      <label>Login</label> 	<p><font color="red">${error}</font></p>
       <input type="text" class="form-control"  aria-describedby="emailHelp"name="login" placeholder="Enter Login">
        <small  class="form-text text-muted">login must contain 6 characters.</small>
     </div>

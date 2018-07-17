@@ -14,6 +14,9 @@ import com.mazurak.cinema.service.UserMovieService;
 
 @WebServlet("/listusersmovies")
 public class UserMoviesServlet extends HttpServlet {
+	public static final int CURRENT_PAGE = 0;
+	public static final int RECORDS_PER_PAGE = 10;
+	public static final int USER_ID = 1;
 
 	private static final long serialVersionUID = 1L;
 
@@ -22,11 +25,11 @@ public class UserMoviesServlet extends HttpServlet {
 	public UserMoviesServlet() {
 		this.userMovieService = IoCContainer.getInit().getUserMovieService();
 	}
-
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		// check active session 
+		// check active session
+		
 		Security.isActiveSession(req, resp);
 
 		resp.setContentType("text/html;charset=UTF-8");
@@ -36,14 +39,11 @@ public class UserMoviesServlet extends HttpServlet {
 				Long.parseLong(req.getSession().getAttribute(AttributeName.USER_ROLE_ATTRIBUTE).toString());
 
 		try {
-			int currentPage = 0;
-			int recordsPerPage = 5;
+			int currentPage = CURRENT_PAGE;
+			int recordsPerPage = RECORDS_PER_PAGE;
 			currentPage = Integer.parseInt(req.getParameter(ParameterName.PAGE));
-			recordsPerPage = Integer.parseInt(req.getParameter("numOfPage"));
-			System.out.println(recordsPerPage);
 			int numOfRows = 0;
-
-			if (roleId == 1) {
+			if (roleId == USER_ID) {
 				numOfRows = userMovieService.getCountMovieInUser(idUser);
 			} else {
 				numOfRows = userMovieService.getAllMovie().size();
@@ -62,7 +62,7 @@ public class UserMoviesServlet extends HttpServlet {
 			req.setAttribute(AttributeName.CURRENT_INDEX, currentPage);
 			req.setAttribute(AttributeName.NUMBER_OF_ALL_PAGES, numOfPage);
 
-			if (roleId == 1) {
+			if (roleId == USER_ID) {
 				req.setAttribute(AttributeName.MOVIE_ATTR, userMovieService.getMoviePagination(
 						userMovieService.getUserMoviesById(idUser), currentPage + 1, recordsPerPage));
 				req.getRequestDispatcher(ViewUrls.USER_LIST_MOVIES_JSP.toString()).forward(req, resp);
